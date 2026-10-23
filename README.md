@@ -9,7 +9,7 @@
 [![Fabric](https://img.shields.io/badge/Modloader-Fabric-blue.svg?style=for-the-badge)](https://fabricmc.net/)
 [![Java 21](https://img.shields.io/badge/Java-21-orange.svg?style=for-the-badge&logo=openjdk)](https://adoptium.net/)
 [![OS Support](https://img.shields.io/badge/Platforms-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg?style=for-the-badge)](#-requisitos-del-sistema--compatibilidad)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-blue.svg?style=for-the-badge&logo=creativecommons)](LICENSE)
 
 </div>
 
@@ -170,6 +170,11 @@ flowchart TD
 
 ---
 
-## 📄 Licencia
+## 📄 Licencia y Términos de Uso
 
-Este proyecto se distribuye bajo la licencia **MIT**. Eres libre de usarlo, modificarlo y compartirlo.
+Este proyecto ha sido creado por **Pelayo Garrido** y está protegido bajo la licencia internacional **[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)](LICENSE)**.
+
+- **Atribución Obligatoria (BY)**: Debes otorgar crédito explícito y visible al autor original (**Pelayo Garrido**) y enlazar a este repositorio oficial. Queda terminantemente prohibido atribuirse la autoría o creación de este mod o de esta idea pedagógica.
+- **Uso No Comercial (NC)**: Queda terminantemente prohibido vender, monetizar, cobrar suscripciones o lucrarse con este mod, su código fuente o cualquier trabajo derivado.
+- **Compartir Igual (SA)**: Cualquier derivación o modificación debe distribuirse bajo exactamente esta misma licencia.
+- **Creadores de Contenido (YouTube / Twitch / TikTok)**: ¡Eres 100% libre de usar este mod en gameplays, directos y series de Minecraft! Solo te pedimos que nombres el mod y enlaces a este repositorio oficial en la descripción de tu contenido.
