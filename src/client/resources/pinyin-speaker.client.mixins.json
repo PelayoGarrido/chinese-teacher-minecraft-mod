@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.pinyinspeaker.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "HandledScreenMixin",
+    "ScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "pinyin-speaker",
+	"version": "${version}",
+	"name": "Pinyin Speaker",
+	"description": "Learn Mandarin Chinese and Spanish in Minecraft with immersive HUD overlays, bilingual tooltips, and zero-latency native TTS speech pronunciation.",
+	"authors": [
+		"Pelayo"
+	],
+	"contact": {
+		"sources": "https://github.com/pelayo/pinyin-speaker"
+	},
+	"license": "MIT",
+	"icon": "assets/pinyin-speaker/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.pinyinspeakerlearninglilcremes.PinyinSpeaker"
+		],
+		"client": [
+			"com.pinyinspeakerlearninglilcremes.client.PinyinSpeakerClient"
+		]
+	},
+	"mixins": [
+		"pinyin-speaker.mixins.json",
+		{
+			"config": "pinyin-speaker.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
