@@ -5,6 +5,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.ParentElement;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
@@ -35,19 +39,46 @@ public class HudOverlay {
         return ItemStack.EMPTY;
     }
 
-    public static DictionaryManager.Entry getCurrentEntry(MinecraftClient client) {
-        if (client.world == null || client.player == null) return null;
+    public static ClickableWidget findHoveredWidget(Screen screen) {
+        if (screen == null) return null;
+        return findHoveredWidgetInElement((Element) screen);
+    }
 
-        // 1. If an inventory / creative / recipe book screen is open:
+    private static ClickableWidget findHoveredWidgetInElement(Element element) {
+        if (element == null) return null;
+        if (element instanceof ClickableWidget widget) {
+            if (widget.isHovered() && widget.visible && !(widget instanceof TextFieldWidget)) {
+                return widget;
+            }
+        }
+        if (element instanceof ParentElement parent) {
+            for (Element child : parent.children()) {
+                ClickableWidget found = findHoveredWidgetInElement(child);
+                if (found != null) return found;
+            }
+        }
+        return null;
+    }
+
+    public static DictionaryManager.Entry getCurrentEntry(MinecraftClient client) {
+        if (client == null) return null;
+
+        // 1. If an inventory / creative / recipe book / menu screen is open:
         if (client.currentScreen != null) {
             ItemStack hovered = getActiveHoveredStack();
             if (hovered != null && !hovered.isEmpty()) {
                 return DictionaryManager.resolve(hovered);
             }
+
+            ClickableWidget widget = findHoveredWidget(client.currentScreen);
+            if (widget != null) {
+                DictionaryManager.Entry entry = DictionaryManager.resolveWidget(widget);
+                if (entry != null) return entry;
+            }
         }
 
         // 2. If in-game (no screen open):
-        if (client.currentScreen == null) {
+        if (client.currentScreen == null && client.world != null && client.player != null) {
             HitResult hit = client.crosshairTarget;
             if (hit != null) {
                 if (hit.getType() == HitResult.Type.BLOCK) {
@@ -77,13 +108,7 @@ public class HudOverlay {
 
     public static void render(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null || client.player == null) return;
-        if (client.getDebugHud().shouldShowDebugHud()) return;
-
-        // Don't render inside non-gameplay screens (e.g. main menu, options, video settings)
-        if (client.currentScreen != null && client.world == null) {
-            return;
-        }
+        if (client == null || client.getDebugHud().shouldShowDebugHud()) return;
 
         DictionaryManager.Entry entry = getCurrentEntry(client);
         if (entry == null || entry.hanzi == null || entry.hanzi.isEmpty()) return;

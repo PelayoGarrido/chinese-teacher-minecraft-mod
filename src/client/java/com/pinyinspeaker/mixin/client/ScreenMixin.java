@@ -9,7 +9,6 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.ParentElement;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,20 +39,16 @@ public abstract class ScreenMixin {
         }
 
         if (keyCode == GLFW.GLFW_KEY_V || keyCode == GLFW.GLFW_KEY_B) {
-            ItemStack stack = HudOverlay.getActiveHoveredStack();
-            if (stack != null && !stack.isEmpty()) {
-                DictionaryManager.Entry entry = DictionaryManager.resolve(stack);
+            MinecraftClient client = MinecraftClient.getInstance();
+            DictionaryManager.Entry entry = HudOverlay.getCurrentEntry(client);
+
+            if (entry != null && entry.hanzi != null && !entry.hanzi.isEmpty()) {
                 if (keyCode == GLFW.GLFW_KEY_V) {
-                    if (entry != null && entry.hanzi != null && !entry.hanzi.isEmpty()) {
-                        ItemSpeaker.speakChinese(entry.hanzi);
-                    } else {
-                        ItemSpeaker.speak(stack);
-                    }
+                    ItemSpeaker.speakChinese(entry.hanzi);
                     cir.setReturnValue(true);
                 } else {
-                    if (entry != null && entry.spanish != null && !entry.spanish.isEmpty()) {
+                    if (entry.spanish != null && !entry.spanish.isEmpty()) {
                         ItemSpeaker.speakSpanish(entry.spanish);
-                        MinecraftClient client = MinecraftClient.getInstance();
                         if (client.player != null) {
                             client.player.sendMessage(
                                     Text.literal("§6[" + entry.hanzi + "] §e" + entry.pinyin + " §7-> §a" + entry.spanish), true);

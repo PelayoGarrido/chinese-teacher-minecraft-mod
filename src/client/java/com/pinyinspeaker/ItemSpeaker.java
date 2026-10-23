@@ -2,7 +2,9 @@ package com.pinyinspeaker;
 
 import com.sun.jna.Function;
 import com.sun.jna.NativeLibrary;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -10,6 +12,7 @@ public class ItemSpeaker {
 
     private static Function libcSystem;
     private static boolean jnaInitialized = false;
+    public static volatile boolean isReady = false;
 
     static {
         // Patch ProcessImpl.launchMechanism to FORK as an extra safeguard
@@ -29,7 +32,7 @@ public class ItemSpeaker {
         } catch (Throwable ignored) {}
     }
 
-    private static synchronized Function getLibcSystem() {
+    public static synchronized Function getLibcSystem() {
         if (!jnaInitialized) {
             try {
                 libcSystem = NativeLibrary.getInstance("c").getFunction("system");
@@ -39,6 +42,25 @@ public class ItemSpeaker {
             jnaInitialized = true;
         }
         return libcSystem;
+    }
+
+    public static void warmUp() {
+        CompletableFuture.runAsync(() -> {
+            try {
+                getLibcSystem();
+                String os = System.getProperty("os.name").toLowerCase();
+                if (os.contains("mac")) {
+                    Function sys = getLibcSystem();
+                    if (sys != null) {
+                        sys.invokeInt(new Object[]{"/usr/bin/say -v Tingting '' 2>/dev/null &"});
+                        sys.invokeInt(new Object[]{"/usr/bin/say -v Mónica '' 2>/dev/null &"});
+                    }
+                }
+            } catch (Throwable ignored) {
+            } finally {
+                isReady = true;
+            }
+        });
     }
 
     public static void speak(ItemStack stack) {
@@ -56,12 +78,24 @@ public class ItemSpeaker {
 
     public static void speakChinese(String text) {
         if (text == null || text.trim().isEmpty()) return;
+        if (!isReady) {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client != null && client.player != null) {
+                client.player.sendMessage(Text.literal("§e[Pinyin Speaker] 正在准备语音... / Cargando motor de voz..."), true);
+            }
+        }
         String clean = text.replaceAll("[\\[\\]\\(\\)\\§\'\"]", "").trim();
         CompletableFuture.runAsync(() -> runTTS(clean, true));
     }
 
     public static void speakSpanish(String text) {
         if (text == null || text.trim().isEmpty()) return;
+        if (!isReady) {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client != null && client.player != null) {
+                client.player.sendMessage(Text.literal("§e[Pinyin Speaker] 正在准备语音... / Cargando motor de voz..."), true);
+            }
+        }
         String clean = text.replaceAll("[\\[\\]\\(\\)\\§\'\"]", "").trim();
         CompletableFuture.runAsync(() -> runTTS(clean, false));
     }

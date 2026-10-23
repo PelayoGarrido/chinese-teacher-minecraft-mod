@@ -20,8 +20,11 @@ public class PinyinSpeakerClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Pre-initialize dictionary
-        DictionaryManager.init();
+        // Pre-initialize dictionary and warm up native TTS engine in background
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            DictionaryManager.init();
+            ItemSpeaker.warmUp();
+        });
 
         // Register keybindings for in-game use (outside inventories)
         speakChineseKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
