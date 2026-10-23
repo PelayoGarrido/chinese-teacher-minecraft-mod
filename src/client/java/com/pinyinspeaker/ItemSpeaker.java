@@ -15,7 +15,6 @@ public class ItemSpeaker {
     public static volatile boolean isReady = false;
 
     static {
-        // Patch ProcessImpl.launchMechanism to FORK as an extra safeguard
         try {
             java.lang.reflect.Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
             f.setAccessible(true);
@@ -106,7 +105,6 @@ public class ItemSpeaker {
             if (os.contains("mac")) {
                 String voice = isChinese ? "Tingting" : "Mónica";
 
-                // Direct JNA libc system invocation - 100% reliable on macOS, bypasses posix_spawn
                 Function sys = getLibcSystem();
                 if (sys != null) {
                     String cmd = "killall say 2>/dev/null; /usr/bin/say -v " + voice + " " + escapeBash(text) + " &";
@@ -114,7 +112,6 @@ public class ItemSpeaker {
                     return;
                 }
 
-                // Fallback: ProcessBuilder
                 new ProcessBuilder("/usr/bin/say", "-v", voice, text).start();
             } else if (os.contains("win")) {
                 String culture = isChinese ? "zh-CN" : "es-ES";

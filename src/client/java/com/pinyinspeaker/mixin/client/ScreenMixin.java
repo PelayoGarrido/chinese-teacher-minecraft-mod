@@ -33,7 +33,6 @@ public abstract class ScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void onScreenKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        // Do not intercept if user is actively typing in any search bar (Creative Search, Recipe Book, Anvil, etc.)
         if ((Object) this instanceof ParentElement parent && isAnyTextFieldFocused(parent.getFocused())) {
             return;
         }

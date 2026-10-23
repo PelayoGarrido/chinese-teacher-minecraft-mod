@@ -20,13 +20,11 @@ public class PinyinSpeakerClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Pre-initialize dictionary and warm up native TTS engine in background
         java.util.concurrent.CompletableFuture.runAsync(() -> {
             DictionaryManager.init();
             ItemSpeaker.warmUp();
         });
 
-        // Register keybindings for in-game use (outside inventories)
         speakChineseKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.pinyin-speaker.speak_chinese",
                 InputUtil.Type.KEYSYM,
@@ -41,16 +39,13 @@ public class PinyinSpeakerClient implements ClientModInitializer {
                 "category.pinyin-speaker"
         ));
 
-        // In-game key press and mouse lock handling
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.world == null || client.player == null) return;
 
-            // Automatically lock cursor when actively playing in world
             if (client.currentScreen == null && client.isWindowFocused() && !client.mouse.isCursorLocked()) {
                 client.mouse.lockCursor();
             }
 
-            // Key handling when no screen is open
             if (client.currentScreen == null) {
                 while (speakChineseKey.wasPressed()) {
                     DictionaryManager.Entry entry = HudOverlay.getCurrentEntry(client);
@@ -70,12 +65,10 @@ public class PinyinSpeakerClient implements ClientModInitializer {
             }
         });
 
-        // Register Top-Center HUD Indicator
         HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
             HudOverlay.render(drawContext);
         });
 
-        // Add clean Hanzi, Pinyin, and Spanish lines to item tooltips
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
             if (stack == null || stack.isEmpty()) return;
             HudOverlay.updateHovered(stack);

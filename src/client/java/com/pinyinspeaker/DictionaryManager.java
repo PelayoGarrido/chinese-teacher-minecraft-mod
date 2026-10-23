@@ -43,7 +43,6 @@ public class DictionaryManager {
         try {
             Gson gson = new Gson();
 
-            // Load minecraft_dict.json
             InputStream dictStream = DictionaryManager.class.getResourceAsStream("/assets/pinyin-speaker/data/minecraft_dict.json");
             if (dictStream != null) {
                 try (Reader reader = new InputStreamReader(dictStream, StandardCharsets.UTF_8)) {
@@ -60,7 +59,6 @@ public class DictionaryManager {
                 }
             }
 
-            // Load chars_pinyin.json
             InputStream charStream = DictionaryManager.class.getResourceAsStream("/assets/pinyin-speaker/data/chars_pinyin.json");
             if (charStream != null) {
                 try (Reader reader = new InputStreamReader(charStream, StandardCharsets.UTF_8)) {
@@ -71,7 +69,6 @@ public class DictionaryManager {
                     }
                 }
             }
-            // Load UI dictionary
             initUiDictionary();
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +84,6 @@ public class DictionaryManager {
         Entry entry = DICTIONARY.get(key);
         if (entry != null) return entry;
 
-        // Fallback for custom-named or mod items
         String rawName = stack.getName().getString()
                 .replaceAll("§[0-9a-fk-or]", "")
                 .replaceAll("\\s*[\\(\\（][^\\)\\）]*[\\)\\）]", "")
@@ -153,14 +149,12 @@ public class DictionaryManager {
 
         init();
 
-        // 1. Check if translatable key exists
         if (message.getContent() instanceof TranslatableTextContent ttc) {
             String key = ttc.getKey();
             Entry entry = UI_DICTIONARY.get(key.toLowerCase());
             if (entry != null) return entry;
         }
 
-        // 2. Resolve by visible string
         return resolveUiString(message.getString());
     }
 
@@ -172,16 +166,13 @@ public class DictionaryManager {
 
         String norm = clean.toLowerCase();
 
-        // Direct check
         Entry direct = UI_DICTIONARY.get(norm);
         if (direct != null) return direct;
 
-        // Strip trailing dots ("Opciones..." -> "opciones")
         String strippedDots = clean.replaceAll("[\\.…]*$", "").trim();
         Entry noDots = UI_DICTIONARY.get(strippedDots.toLowerCase());
         if (noDots != null) return noDots;
 
-        // Handle "Left: Right" pattern (e.g. "Dificultad: Normal", "Difficulty: Hard", "Graphics: Fancy", "Brillo: 50%")
         if (strippedDots.contains(":")) {
             int idx = strippedDots.indexOf(':');
             String left = strippedDots.substring(0, idx).trim();
@@ -207,7 +198,6 @@ public class DictionaryManager {
             }
         }
 
-        // If the text contains Chinese characters already (e.g. game is in Chinese):
         if (hasHanzi(clean)) {
             String pinyin = toPinyin(clean);
             return new Entry(clean, pinyin, clean);
@@ -226,7 +216,6 @@ public class DictionaryManager {
     private static void initUiDictionary() {
         if (!UI_DICTIONARY.isEmpty()) return;
 
-        // General / Main Menus
         putUi("menu.options", "选项", "xuǎn xiàng", "Opciones");
         putUi("options", "选项", "xuǎn xiàng", "Opciones");
         putUi("menu.returnToGame", "返回游戏", "fǎn huí yóu xì", "Volver al juego");
@@ -274,7 +263,6 @@ public class DictionaryManager {
         putUi("auto", "自动", "zì dòng", "Automático");
         putUi("default", "默认", "mò rèn", "Por defecto");
 
-        // Settings / Options categories
         putUi("options.video", "视频设置", "shì pín shè zhì", "Gráficos");
         putUi("options.videoTitle", "视频设置", "shì pín shè zhì", "Gráficos");
         putUi("video settings", "视频设置", "shì pín shè zhì", "Gráficos");
@@ -300,7 +288,6 @@ public class DictionaryManager {
         putUi("options.keybinds", "按键绑定", "àn jiàn bǎng dìng", "Asignar teclas");
         putUi("key binds", "按键绑定", "àn jiàn bǎng dìng", "Asignar teclas");
 
-        // Options Sliders & Toggles
         putUi("options.fov", "视场", "shì chǎng", "Campo visual");
         putUi("fov", "视场", "shì chǎng", "Campo visual");
         putUi("options.difficulty", "难度", "nán dù", "Dificultad");
@@ -384,7 +371,6 @@ public class DictionaryManager {
         putUi("soundCategory.voice", "语音", "yǔ yīn", "Voz");
         putUi("voice/speech", "语音", "yǔ yīn", "Voz");
 
-        // Worlds & Servers
         putUi("selectWorld.select", "进入选中的世界", "jìn rù xuǎn zhòng de shì jiè", "Jugar al mundo seleccionado");
         putUi("play selected world", "进入选中的世界", "jìn rù xuǎn zhòng de shì jiè", "Jugar al mundo seleccionado");
         putUi("selectWorld.create", "创建新的世界", "chuàng jiàn xīn de shì jiè", "Crear un mundo nuevo");

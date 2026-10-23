@@ -32,7 +32,6 @@ public class HudOverlay {
         if (client.currentScreen == null) {
             return ItemStack.EMPTY;
         }
-        // Valid if hovered within the last 600ms
         if (System.currentTimeMillis() - lastHoveredTime < 600) {
             return lastHoveredStack;
         }
@@ -63,7 +62,6 @@ public class HudOverlay {
     public static DictionaryManager.Entry getCurrentEntry(MinecraftClient client) {
         if (client == null) return null;
 
-        // 1. If an inventory / creative / recipe book / menu screen is open:
         if (client.currentScreen != null) {
             ItemStack hovered = getActiveHoveredStack();
             if (hovered != null && !hovered.isEmpty()) {
@@ -77,7 +75,6 @@ public class HudOverlay {
             }
         }
 
-        // 2. If in-game (no screen open):
         if (client.currentScreen == null && client.world != null && client.player != null) {
             HitResult hit = client.crosshairTarget;
             if (hit != null) {
@@ -96,7 +93,6 @@ public class HudOverlay {
                 }
             }
 
-            // Fallback: Item held in main hand
             ItemStack hand = client.player.getMainHandStack();
             if (hand != null && !hand.isEmpty()) {
                 return DictionaryManager.resolve(hand);
@@ -129,7 +125,6 @@ public class HudOverlay {
         int x = (screenWidth - boxWidth) / 2;
         int y = 12;
 
-        // Dark background box with subtle top accent line
         context.fill(x, y, x + boxWidth, y + boxHeight, 0xB011161F);
         context.fill(x, y, x + boxWidth, y + 2, 0xFFFFAA00);
 

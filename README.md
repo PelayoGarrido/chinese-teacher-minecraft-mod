@@ -4,6 +4,8 @@ Client-side Fabric mod for Minecraft 1.21.1 that integrates Mandarin Chinese and
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-52796F?style=flat-square)](https://minecraft.net)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1-2D6A4F?style=flat-square)](https://fabricmc.net)
+[![Modrinth](https://img.shields.io/badge/Modrinth-Available-00AF5C?style=flat-square&logo=modrinth&logoColor=white)](https://modrinth.com/mod/chinese-teacher-pinyin-speaker)
+[![CurseForge](https://img.shields.io/badge/CurseForge-Available-F16436?style=flat-square&logo=curseforge&logoColor=white)](https://www.curseforge.com/minecraft/mc-mods/chinese-teacher-pinyin-speaker/)
 [![Java](https://img.shields.io/badge/Java-21-1B4332?style=flat-square)](https://adoptium.net)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-081C15?style=flat-square)](LICENSE)
 
@@ -48,7 +50,7 @@ Compatible with Sodium, Iris Shaders, ModMenu, and standard performance mods.
 ## Installation
 
 1. Install **Fabric Loader** for Minecraft 1.21.1.
-2. Download **Fabric API** and **`chinese-teacher-minecraft-mod-1.0.0.jar`**.
+2. Download **Fabric API** and **`chinese-teacher-minecraft-mod-1.0.0.jar`** from [Modrinth](https://modrinth.com/mod/chinese-teacher-pinyin-speaker) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/chinese-teacher-pinyin-speaker/).
 3. Place both `.jar` files in your `.minecraft/mods` directory:
    - **macOS**: `~/Library/Application Support/minecraft/mods/`
    - **Windows**: `%appdata%\.minecraft\mods\`
